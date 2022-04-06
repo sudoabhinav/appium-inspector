@@ -6,27 +6,11 @@ import Screenshot from './Screenshot';
 import SelectedElement from './SelectedElement';
 import Source from './Source';
 import InspectorStyles from './Inspector.css';
-import RecordedActions from './RecordedActions';
-import Actions from './Actions';
 import { clipboard } from '../../polyfills';
 import {
-  SelectOutlined,
-  ScanOutlined,
-  SwapRightOutlined,
-  ArrowLeftOutlined,
-  ReloadOutlined,
-  EyeOutlined,
-  PauseOutlined,
-  SearchOutlined,
-  CopyOutlined,
-  CloseOutlined,
   FileTextOutlined,
   TagOutlined,
-  ThunderboltOutlined,
-  AppstoreOutlined,
-  GlobalOutlined,
 } from '@ant-design/icons';
-import { BUTTON } from '../../../../gui-common/components/AntdTypes';
 
 const {SELECT, SWIPE, TAP} = SCREENSHOT_INTERACTION_MODE;
 
@@ -114,10 +98,8 @@ export default class Inspector extends Component {
 
   render () {
     const {screenshot, screenshotError, selectedElement = {},
-           applyClientMethod, quitSession, isRecording, showRecord, startRecording,
-           pauseRecording, showLocatorTestModal, appMode,
-           screenshotInteractionMode, isFindingElementsTimes, visibleCommandMethod,
-           selectedInteractionMode, selectInteractionMode, selectAppMode, setVisibleCommandResult,
+            quitSession, isFindingElementsTimes, visibleCommandMethod,
+           selectedInteractionMode, selectInteractionMode, setVisibleCommandResult,
            showKeepAlivePrompt, keepSessionAlive, sourceXML, t, visibleCommandResult} = this.props;
     const {path} = selectedElement;
 
@@ -132,9 +114,6 @@ export default class Inspector extends Component {
         }
       </div>
       <div id='sourceTreeContainer' className={InspectorStyles['interaction-tab-container']} >
-        {showRecord &&
-          <RecordedActions {...this.props} />
-        }
         <Tabs activeKey={selectedInteractionMode}
           size="small"
           onChange={(tab) => selectInteractionMode(tab)}>
@@ -155,78 +134,20 @@ export default class Inspector extends Component {
               </div>
             </div>
           </TabPane>
-          <TabPane tab={t('Actions')} key={INTERACTION_MODE.ACTIONS}>
-            <Card
-              title={<span><ThunderboltOutlined /> {t('Actions')}</span>}
-              className={InspectorStyles['interaction-tab-card']}>
-              <Actions {...this.props} />
-            </Card>
-          </TabPane>
         </Tabs>
       </div>
     </div>;
 
     const appModeControls = <div className={InspectorStyles['action-controls']}>
-      <ButtonGroup value={appMode}>
-        <Tooltip title={t('Native App Mode')}>
-          <Button icon={<AppstoreOutlined/>} onClick={() => {selectAppMode(APP_MODE.NATIVE);}}
-            type={appMode === APP_MODE.NATIVE ? BUTTON.PRIMARY : BUTTON.DEFAULT}
-          />
-        </Tooltip>
-        <Tooltip title={t('Web/Hybrid App Mode')}>
-          <Button icon={<GlobalOutlined/>} onClick={() => {selectAppMode(APP_MODE.WEB_HYBRID);}}
-            type={appMode === APP_MODE.WEB_HYBRID ? BUTTON.PRIMARY : BUTTON.DEFAULT}
-          />
-        </Tooltip>
-      </ButtonGroup>
+      
     </div>;
 
     let actionControls = <div className={InspectorStyles['action-controls']}>
-      <ButtonGroup value={screenshotInteractionMode}>
-        <Tooltip title={t('Select Elements')}>
-          <Button icon={<SelectOutlined/>} onClick={() => {this.screenshotInteractionChange(SELECT);}}
-            type={screenshotInteractionMode === SELECT ? BUTTON.PRIMARY : BUTTON.DEFAULT}
-          />
-        </Tooltip>
-        <Tooltip title={t('Swipe By Coordinates')}>
-          <Button icon={<SwapRightOutlined/>} onClick={() => {this.screenshotInteractionChange(SWIPE);}}
-            type={screenshotInteractionMode === SWIPE ? BUTTON.PRIMARY : BUTTON.DEFAULT}
-          />
-        </Tooltip>
-        <Tooltip title={t('Tap By Coordinates')}>
-          <Button icon={<ScanOutlined/>} onClick={() => {this.screenshotInteractionChange(TAP);}}
-            type={screenshotInteractionMode === TAP ? BUTTON.PRIMARY : BUTTON.DEFAULT}
-          />
-        </Tooltip>
-      </ButtonGroup>
+      
     </div>;
 
     const generalControls = <ButtonGroup>
-      <Tooltip title={t('Back')}>
-        <Button id='btnGoBack' icon={<ArrowLeftOutlined/>} onClick={() => applyClientMethod({methodName: 'back'})}/>
-      </Tooltip>
-      <Tooltip title={t('refreshSource')}>
-        <Button id='btnReload' icon={<ReloadOutlined/>} onClick={() => applyClientMethod({methodName: 'getPageSource'})}/>
-      </Tooltip>
-      {!isRecording &&
-        <Tooltip title={t('Start Recording')}>
-          <Button id='btnStartRecording' icon={<EyeOutlined/>} onClick={startRecording}/>
-        </Tooltip>
-      }
-      {isRecording &&
-        <Tooltip title={t('Pause Recording')}>
-          <Button id='btnPause' icon={<PauseOutlined/>} type={BUTTON.DANGER} onClick={pauseRecording}/>
-        </Tooltip>
-      }
-      <Tooltip title={t('Search for element')}>
-        <Button id='searchForElement' icon={<SearchOutlined/>} onClick={showLocatorTestModal}/>
-      </Tooltip>
-      <Tooltip title={t('Copy XML Source to Clipboard')}>
-        <Button id='btnSourceXML' icon={<CopyOutlined/>} onClick={() => clipboard.writeText(sourceXML)}/>
-      </Tooltip>
-      <Tooltip title={t('quitSessionAndClose')}>
-        <Button id='btnClose' icon={<CloseOutlined/>} onClick={() => quitSession()}/>
-      </Tooltip>
+      
     </ButtonGroup>;
 
     let controls = <div className={InspectorStyles['inspector-toolbar']}>

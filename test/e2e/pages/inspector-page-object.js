@@ -86,7 +86,6 @@ InspectorPage.selectors = {
   selectedElementBody: '#selectedElementContainer .ant-card-body',
   tapSelectedElementButton: '#selectedElementContainer #btnTapElement',
   sourceTreeNode: '#sourceContainer .ant-tree-node-content-wrapper',
-  recordedActionsPane: 'div[class*=_recorded-actions]',
   startRecordingButton: '#btnStartRecording',
   pauseRecordingButton: '#btnPause',
   reloadButton: '#btnReload',

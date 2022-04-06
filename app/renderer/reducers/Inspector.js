@@ -3,8 +3,7 @@ import { SET_SOURCE_AND_SCREENSHOT, QUIT_SESSION_REQUESTED, QUIT_SESSION_DONE,
          SESSION_DONE, SELECT_ELEMENT, UNSELECT_ELEMENT, SELECT_HOVERED_ELEMENT, SET_SELECTED_ELEMENT_ID, SET_INTERACTIONS_NOT_AVAILABLE,
          UNSELECT_HOVERED_ELEMENT, METHOD_CALL_REQUESTED, METHOD_CALL_DONE,
          SET_FIELD_VALUE, SET_EXPANDED_PATHS, SHOW_SEND_KEYS_MODAL,
-         HIDE_SEND_KEYS_MODAL, START_RECORDING, PAUSE_RECORDING, CLEAR_RECORDING,
-         SET_ACTION_FRAMEWORK, RECORD_ACTION, CLOSE_RECORDER, SET_SHOW_BOILERPLATE, SET_SESSION_DETAILS,
+         HIDE_SEND_KEYS_MODAL, SET_ACTION_FRAMEWORK, CLOSE_RECORDER, SET_SHOW_BOILERPLATE, SET_SESSION_DETAILS,
          SHOW_LOCATOR_TEST_MODAL, HIDE_LOCATOR_TEST_MODAL, SET_LOCATOR_TEST_STRATEGY, SET_LOCATOR_TEST_VALUE,
          SEARCHING_FOR_ELEMENTS, SEARCHING_FOR_ELEMENTS_COMPLETED, SET_LOCATOR_TEST_ELEMENT, CLEAR_SEARCH_RESULTS,
          ADD_ASSIGNED_VAR_CACHE, CLEAR_ASSIGNED_VAR_CACHE, SET_SCREENSHOT_INTERACTION_MODE,
@@ -25,10 +24,8 @@ const INITIAL_STATE = {
   userWaitTimeout: null,
   lastActiveMoment: null,
   expandedPaths: ['0'],
-  isRecording: false,
   showRecord: false,
   showBoilerplate: false,
-  recordedActions: [],
   actionFramework: DEFAULT_FRAMEWORK,
   sessionDetails: {},
   isLocatorTestModalVisible: false,
@@ -182,39 +179,11 @@ export default function inspector (state = INITIAL_STATE, action) {
         }
       };
 
-    case START_RECORDING:
-      return {
-        ...state,
-        isRecording: true,
-        showRecord: true
-      };
-
-    case PAUSE_RECORDING:
-      return {
-        ...state,
-        isRecording: false,
-        showRecord: state.recordedActions.length > 0
-      };
-
-    case CLEAR_RECORDING:
-      return {
-        ...state,
-        recordedActions: []
-      };
-
+    
     case SET_ACTION_FRAMEWORK:
       return {
         ...state,
         actionFramework: action.framework || DEFAULT_FRAMEWORK
-      };
-
-    case RECORD_ACTION:
-      return {
-        ...state,
-        recordedActions: [
-          ...state.recordedActions,
-          {action: action.action, params: action.params}
-        ]
       };
 
     case ADD_ASSIGNED_VAR_CACHE:

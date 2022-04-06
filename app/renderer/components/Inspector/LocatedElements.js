@@ -56,31 +56,6 @@ class LocatedElements extends Component {
               {t('Copy ID')}
             </Button>
           </div>
-          <div>
-            <Button size='small'
-              disabled={!locatorTestElement}
-              onClick={() => applyClientMethod({methodName: 'click', elementId: locatorTestElement})}
-            >
-              {t('Tap Element')}
-            </Button>
-          </div>
-          <div>
-            <Button size='small'
-              disabled={!locatorTestElement}
-              onClick={() => applyClientMethod({methodName: 'clear', elementId: locatorTestElement})}
-            >
-              {t('Clear')}
-            </Button>
-          </div>
-          <div className={InspectorStyles['send-keys-container']}>
-            <Input size='small' placeholder={t('Enter keys')} onChange={(e) => this.setState({...this.state, sendKeys: e.target.value})}/>
-            <Button size='small'
-              disabled={!locatorTestElement}
-              onClick={() => applyClientMethod({methodName: 'sendKeys', elementId: locatorTestElement, args: [this.state.sendKeys || '']})}
-            >
-              {t('Send Keys')}
-            </Button>
-          </div>
         </div>}
       </Col>
     </Row>;

@@ -19,7 +19,7 @@ export default () => (
       <Switch>
         <Route exact path="/" component={SessionPage} />
         <Route path="/session" component={SessionPage} />
-        <Route path="/inspector" component={InspectorPage} />
+        <Route path="/" component={InspectorPage} />
       </Switch>
     </App>
   </Suspense>

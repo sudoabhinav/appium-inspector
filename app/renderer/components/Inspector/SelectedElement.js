@@ -58,17 +58,14 @@ class SelectedElement extends Component {
 
   render () {
     let {
-      applyClientMethod,
       contexts,
       currentContext,
       setFieldValue,
-      getFindElementsTimes,
       findElementsExecutionTimes,
       isFindingElementsTimes,
       sendKeys,
       selectedElement,
       sendKeysModalVisible,
-      showSendKeysModal,
       hideSendKeysModal,
       selectedElementId: elementId,
       sourceXML,
@@ -201,51 +198,6 @@ class SelectedElement extends Component {
           <Alert type={ALERT.INFO} message={t('Interactions are not available for this element')} showIcon />
         </Col>
       </Row>}
-      <Row justify="center" type={ROW.FLEX} align="middle" gutter={10} className={styles.elementActions}>
-        <Col>
-          <ButtonGroup>
-            <Tooltip title={t('Tap')}>
-              <Button
-                disabled={isDisabled}
-                icon={tapIcon}
-                id='btnTapElement'
-                onClick={() => applyClientMethod({methodName: 'click', elementId})}
-              />
-            </Tooltip>
-            <Tooltip title={t('Send Keys')}>
-              <Button
-                disabled={isDisabled}
-                id='btnSendKeysToElement'
-                icon={<EditOutlined/>}
-                onClick={() => showSendKeysModal()}
-              />
-            </Tooltip>
-            <Tooltip title={t('Clear')}>
-              <Button
-                disabled={isDisabled}
-                id='btnClearElement'
-                icon={<UndoOutlined/>}
-                onClick={() => applyClientMethod({methodName: 'clear', elementId})}
-              />
-            </Tooltip>
-            <Tooltip title={t('Copy Attributes to Clipboard')}>
-              <Button
-                disabled={isDisabled}
-                id='btnCopyAttributes'
-                icon={<CopyOutlined/>}
-                onClick={() => clipboard.writeText(JSON.stringify(dataSource))}/>
-            </Tooltip>
-            <Tooltip title={t('Get Timing')}>
-              <Button
-                disabled={isDisabled}
-                id='btnGetTiming'
-                icon={<HourglassOutlined/>}
-                onClick={() => getFindElementsTimes(findDataSource)}
-              />
-            </Tooltip>
-          </ButtonGroup>
-        </Col>
-      </Row>
       {findDataSource.length > 0 &&
         <Row>
           <Table

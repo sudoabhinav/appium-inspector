@@ -75,20 +75,4 @@ describe('inspector window', function () {
     });
   });
 
-  it('shows a new pane when click "Start Recording" button and then the pane disappears when clicking "Pause"', async function () {
-    // Check that there's no recorded actions pane
-    let recordedPanes = await client.$$(inspector.recordedActionsPane);
-    recordedPanes.length.should.equal(0);
-
-    // Start a recording and check that there is a recorded actions pane
-    await inspector.startRecording();
-    await (await client.$(inspector.recordedActionsPane)).waitForExist({timeout: 2000});
-    recordedPanes = await client.$$(inspector.recordedActionsPane);
-    recordedPanes.length.should.equal(1);
-
-    // Pause the recording and check that the recorded actions pane is gone again
-    await inspector.pauseRecording();
-    recordedPanes = await client.$$(inspector.recordedActionsPane);
-    recordedPanes.length.should.equal(0);
-  });
 });
