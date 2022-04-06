@@ -80,19 +80,19 @@ export default class Inspector extends Component {
     this.props.runKeepAliveLoop();
     window.addEventListener('resize', this.updateSourceTreeWidth);
     // this.startSession();
-    let desiredCapabilities = {
-      "appium:platform": "Android",
-      "lt:options": {
-        "deviceName": "OnePlus 6T",
-        "platformVersion": "10",
-        "queueTimeout": 300,
-        "idleTimeout": "120",
-        "network": false,
-        "app": "lt://APP10020521645197705091698",
-        "devicelog": true
-      }
-    };
-    this.props.startSession(desiredCapabilities)
+    // let desiredCapabilities = {
+    //   "appium:platform": "Android",
+    //   "lt:options": {
+    //     "deviceName": "OnePlus 6T",
+    //     "platformVersion": "10",
+    //     "queueTimeout": 300,
+    //     "idleTimeout": "120",
+    //     "network": false,
+    //     "app": "lt://APP10020521645197705091698",
+    //     "devicelog": true
+    //   }
+    // };
+    // this.props.startSession(desiredCapabilities)
   }
 
   componentDidUpdate () {
