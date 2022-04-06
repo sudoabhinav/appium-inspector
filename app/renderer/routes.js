@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { Switch, Route } from 'react-router';
 import App from './containers/App';
-import SessionPage from './containers/SessionPage';
+// import SessionPage from './containers/SessionPage';
 import InspectorPage from './containers/InspectorPage';
 import Spinner from '../../gui-common/components/Spinner/Spinner';
 import { ipcRenderer } from './polyfills';
@@ -17,9 +17,9 @@ export default () => (
   <Suspense fallback={<Spinner />}>
     <App>
       <Switch>
-        <Route exact path="/" component={SessionPage} />
-        <Route path="/session" component={SessionPage} />
-        <Route path="/" component={InspectorPage} />
+        <Route exact path="/" component={InspectorPage} />
+        {/* <Route path="/session" component={SessionPage} />*/}
+        <Route path="/" component={InspectorPage} /> 
       </Switch>
     </App>
   </Suspense>

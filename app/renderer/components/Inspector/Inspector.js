@@ -11,6 +11,7 @@ import {
   FileTextOutlined,
   TagOutlined,
 } from '@ant-design/icons';
+import { setSessionDetails } from '../../actions/Inspector';
 
 const {SELECT, SWIPE, TAP} = SCREENSHOT_INTERACTION_MODE;
 
@@ -78,6 +79,20 @@ export default class Inspector extends Component {
     this.props.getSavedActionFramework();
     this.props.runKeepAliveLoop();
     window.addEventListener('resize', this.updateSourceTreeWidth);
+    // this.startSession();
+    let desiredCapabilities = {
+      "appium:platform": "Android",
+      "lt:options": {
+        "deviceName": "OnePlus 6T",
+        "platformVersion": "10",
+        "queueTimeout": 300,
+        "idleTimeout": "120",
+        "network": false,
+        "app": "lt://APP10020521645197705091698",
+        "devicelog": true
+      }
+    };
+    this.props.startSession(desiredCapabilities)
   }
 
   componentDidUpdate () {
