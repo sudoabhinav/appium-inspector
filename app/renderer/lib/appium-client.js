@@ -201,23 +201,24 @@ export default class AppiumClient {
   }
 
   async getWindowUpdate () {
-    let windowSize, windowSizeError;
-    const {client: {capabilities: {deviceScreenSize, platformName}}} = this.driver;
-    try {
-      // The call doesn't need to be made for Android for two reasons
-      // - when appMode is hybrid Chrome driver doesn't know this command
-      // - the data is already on the driver
-      if (_.toLower(platformName) === 'android') {
-        const [width, height] = deviceScreenSize.split('x');
-        windowSize = {width, height, x: 0, y: 0};
-      } else {
-        windowSize = await this.driver.getWindowRect();
-      }
-    } catch (e) {
-      windowSizeError = e;
-    }
+    // let windowSize, windowSizeError;
+    // console.log("this.driver", this.driver)
+    // const {client: {capabilities: {deviceScreenSize, platformName}}} = this.driver;
+    // try {
+    //   // The call doesn't need to be made for Android for two reasons
+    //   // - when appMode is hybrid Chrome driver doesn't know this command
+    //   // - the data is already on the driver
+    //   if (_.toLower(platformName) === 'android') {
+    //     const [width, height] = deviceScreenSize.split('x');
+    //     windowSize = {width, height, x: 0, y: 0};
+    //   } else {
+    //     windowSize = await this.driver.getWindowRect();
+    //   }
+    // } catch (e) {
+    //   windowSizeError = e;
+    // }
 
-    return {windowSize, windowSizeError};
+    return null;
   }
 
   async getContextUpdate () {
