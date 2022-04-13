@@ -33,7 +33,7 @@ class Screenshot extends Component {
 
     // now update scale ratio
     this.setState({
-      scaleRatio: (this.props.windowSize.width / screenshotEl.offsetWidth)
+      scaleRatio: (1080 / screenshotEl.offsetWidth)
     });
   }
 
