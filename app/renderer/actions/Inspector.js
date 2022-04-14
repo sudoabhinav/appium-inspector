@@ -1,12 +1,8 @@
 import _ from 'lodash';
-import { push } from 'connected-react-router';
-import { getLocators, APP_MODE } from '../components/Inspector/shared';
+import { getLocators } from '../components/Inspector/shared';
 import { xmlToJSON } from '../util';
-import frameworks from '../lib/client-frameworks';
-import { getSetting, setSetting, SAVED_FRAMEWORK } from '../../shared/settings';
-import i18n from '../../configs/i18next.config.renderer';
+import { getSetting, SAVED_FRAMEWORK } from '../../shared/settings';
 import AppiumClient from '../lib/appium-client';
-import { notification } from 'antd';
 
 export const SET_SESSION_DETAILS = 'SET_SESSION_DETAILS';
 export const SET_SOURCE_AND_SCREENSHOT = 'SET_SOURCE_AND_SCREENSHOT';
@@ -1510,18 +1506,6 @@ export function applyClientMethod (params) {
   };
 }
 
-export function addAssignedVarCache (varName) {
-  return (dispatch) => {
-    dispatch({type: ADD_ASSIGNED_VAR_CACHE, varName});
-  };
-}
-
-export function showSendKeysModal () {
-  return (dispatch) => {
-    dispatch({type: SHOW_SEND_KEYS_MODAL});
-  };
-}
-
 export function hideSendKeysModal () {
   return (dispatch) => {
     dispatch({type: HIDE_SEND_KEYS_MODAL});
@@ -1543,91 +1527,31 @@ export function setExpandedPaths (paths) {
   };
 }
 
-/**
- * Quit the session and go back to the new session window
- */
-export function quitSession (reason, killedByUser = true) {
-  return async (dispatch, getState) => {
-    const killAction = killKeepAliveLoop();
-    killAction(dispatch, getState);
-    const applyAction = applyClientMethod({methodName: 'quit'});
-    await applyAction(dispatch, getState);
-    dispatch({type: QUIT_SESSION_DONE});
-    dispatch(push('/session'));
-    if (!killedByUser) {
-      notification.error({
-        message: 'Error',
-        description: reason || i18n.t('Session has been terminated'),
-        duration: 0
-      });
-    }
-  };
-}
-
-export function startRecording () {
-  return (dispatch) => {
-    dispatch({type: START_RECORDING});
-  };
-}
-
-export function pauseRecording () {
-  return (dispatch) => {
-    dispatch({type: PAUSE_RECORDING});
-  };
-}
-
-export function clearRecording () {
-  return (dispatch) => {
-    dispatch({type: CLEAR_RECORDING});
-    dispatch({type: CLEAR_ASSIGNED_VAR_CACHE}); // Get rid of the variable cache
-  };
-}
+// /**
+//  * Quit the session and go back to the new session window
+//  */
+// export function quitSession (reason, killedByUser = true) {
+//   return async (dispatch, getState) => {
+//     const killAction = killKeepAliveLoop();
+//     killAction(dispatch, getState);
+//     const applyAction = applyClientMethod({methodName: 'quit'});
+//     await applyAction(dispatch, getState);
+//     dispatch({type: QUIT_SESSION_DONE});
+//     dispatch(push('/session'));
+//     if (!killedByUser) {
+//       notification.error({
+//         message: 'Error',
+//         description: reason || i18n.t('Session has been terminated'),
+//         duration: 0
+//       });
+//     }
+//   };
+// }
 
 export function getSavedActionFramework () {
   return async (dispatch) => {
     let framework = await getSetting(SAVED_FRAMEWORK);
     dispatch({type: SET_ACTION_FRAMEWORK, framework});
-  };
-}
-
-export function setActionFramework (framework) {
-  return async (dispatch) => {
-    if (!frameworks[framework]) {
-      throw new Error(i18n.t('frameworkNotSupported', {framework}));
-    }
-    await setSetting(SAVED_FRAMEWORK, framework);
-    dispatch({type: SET_ACTION_FRAMEWORK, framework});
-  };
-}
-
-export function recordAction (action, params) {
-  return (dispatch) => {
-    dispatch({type: RECORD_ACTION, action, params});
-  };
-}
-
-export function closeRecorder () {
-  return (dispatch) => {
-    dispatch({type: CLOSE_RECORDER});
-  };
-}
-
-export function toggleShowBoilerplate () {
-  return (dispatch, getState) => {
-    const show = !getState().inspector.showBoilerplate;
-    dispatch({type: SET_SHOW_BOILERPLATE, show});
-  };
-}
-
-export function setSessionDetails (driver, sessionDetails) {
-  return (dispatch) => {
-    dispatch({type: SET_SESSION_DETAILS, driver, sessionDetails});
-  };
-}
-
-export function showLocatorTestModal () {
-  return (dispatch) => {
-    dispatch({type: SHOW_LOCATOR_TEST_MODAL});
   };
 }
 
@@ -1668,32 +1592,6 @@ export function searchForElement (strategy, selector) {
       dispatch({type: SEARCHING_FOR_ELEMENTS_COMPLETED, elements});
     } catch (error) {
       dispatch({type: SEARCHING_FOR_ELEMENTS_COMPLETED});
-      console.log(error)
-    }
-  };
-}
-
-/**
- * Get all the find element times based on the find data source
- */
-export function getFindElementsTimes (findDataSource) {
-  return async (dispatch, getState) => {
-    dispatch({type: GET_FIND_ELEMENTS_TIMES});
-    try {
-      const findElementsExecutionTimes = [];
-      for (const element of findDataSource) {
-        const {find, key, selector} = element;
-        const action = callClientMethod({strategy: key, selector});
-        const {executionTime} = await action(dispatch, getState);
-        findElementsExecutionTimes.push({find, key, selector, time: executionTime});
-      }
-
-      dispatch({
-        type: GET_FIND_ELEMENTS_TIMES_COMPLETED,
-        findElementsExecutionTimes: _.sortBy(findElementsExecutionTimes, ['time']),
-      });
-    } catch (error) {
-      dispatch({type: GET_FIND_ELEMENTS_TIMES_COMPLETED});
       console.log(error)
     }
   };
@@ -1741,24 +1639,6 @@ export function clearSearchResults () {
   };
 }
 
-export function selectScreenshotInteractionMode (screenshotInteractionMode) {
-  return (dispatch) => {
-    dispatch({type: SET_SCREENSHOT_INTERACTION_MODE, screenshotInteractionMode });
-  };
-}
-
-export function selectAppMode (mode) {
-  return async (dispatch, getState) => {
-    const {appMode} = getState().inspector;
-    dispatch({type: SET_APP_MODE, mode});
-    // if we're transitioning to hybrid mode, do a pre-emptive search for contexts
-    if (appMode !== mode && mode === APP_MODE.WEB_HYBRID) {
-      const action = applyClientMethod({methodName: 'getPageSource'});
-      await action(dispatch, getState);
-    }
-  };
-}
-
 export function setSwipeStart (swipeStartX, swipeStartY) {
   return (dispatch) => {
     dispatch({type: SET_SWIPE_START, swipeStartX, swipeStartY});
@@ -1789,88 +1669,9 @@ export function hideKeepAlivePrompt () {
   };
 }
 
-export function selectActionGroup (group) {
-  return (dispatch) => {
-    dispatch({type: SELECT_ACTION_GROUP, group});
-  };
-}
-
-export function selectSubActionGroup (group) {
-  return (dispatch) => {
-    dispatch({type: SELECT_SUB_ACTION_GROUP, group});
-  };
-}
-
 export function selectInteractionMode (interaction) {
   return (dispatch) => {
     dispatch({type: SELECT_INTERACTION_MODE, interaction});
-  };
-}
-
-export function startEnteringActionArgs (actionName, action) {
-  return (dispatch) => {
-    dispatch({type: ENTERING_ACTION_ARGS, actionName, action});
-  };
-}
-
-export function cancelPendingAction () {
-  return (dispatch) => {
-    dispatch({type: REMOVE_ACTION});
-  };
-}
-
-export function setActionArg (index, value) {
-  return (dispatch) => {
-    dispatch({type: SET_ACTION_ARG, index, value});
-  };
-}
-
-/**
- * Ping server every 30 seconds to prevent `newCommandTimeout` from killing session
- */
-export function runKeepAliveLoop () {
-  return (dispatch, getState) => {
-    dispatch({type: SET_LAST_ACTIVE_MOMENT, lastActiveMoment: Date.now()});
-    const {driver} = getState().inspector;
-
-    const keepAliveInterval = setInterval(async () => {
-      const {lastActiveMoment} = getState().inspector;
-      console.log('Pinging Appium server to keep session active'); // eslint-disable-line no-console
-      try {
-        await driver.getTimeouts(); // Pings the Appium server to keep it alive
-      } catch (ign) {}
-      const now = Date.now();
-
-      // If the new command limit has been surpassed, prompt user if they want to keep session going
-      // Give them WAIT_FOR_USER_KEEP_ALIVE ms to respond
-      if (now - lastActiveMoment > NO_NEW_COMMAND_LIMIT) {
-        const action = promptKeepAlive();
-        action(dispatch);
-
-        // After the time limit kill the session (this timeout will be killed if they keep it alive)
-        const userWaitTimeout = setTimeout(() => {
-          const action = quitSession('Session closed due to inactivity', false);
-          action(dispatch, getState);
-        }, WAIT_FOR_USER_KEEP_ALIVE);
-        dispatch({type: SET_USER_WAIT_TIMEOUT, userWaitTimeout});
-      }
-    }, KEEP_ALIVE_PING_INTERVAL);
-    dispatch({type: SET_KEEP_ALIVE_INTERVAL, keepAliveInterval});
-  };
-}
-
-/**
- * Get rid of the intervals to keep the session alive
- */
-export function killKeepAliveLoop () {
-  return (dispatch, getState) => {
-    const {keepAliveInterval, userWaitTimeout} = getState().inspector;
-    clearInterval(keepAliveInterval);
-    if (userWaitTimeout) {
-      clearTimeout(userWaitTimeout);
-    }
-    dispatch({type: SET_KEEP_ALIVE_INTERVAL, keepAliveInterval: null});
-    dispatch({type: SET_USER_WAIT_TIMEOUT, userWaitTimeout: null});
   };
 }
 
