@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import { debounce } from 'lodash';
-import { SCREENSHOT_INTERACTION_MODE, INTERACTION_MODE, APP_MODE } from './shared';
+import { INTERACTION_MODE } from './shared';
 import { Card, Button, Spin, Tooltip, Modal, Tabs } from 'antd';
 import Screenshot from './Screenshot';
 import SelectedElement from './SelectedElement';
 import Source from './Source';
 import InspectorStyles from './Inspector.css';
-import { clipboard } from '../../polyfills';
 import {
   FileTextOutlined,
   TagOutlined,
 } from '@ant-design/icons';
-import { setSessionDetails } from '../../actions/Inspector';
 
-const {SELECT, SWIPE, TAP} = SCREENSHOT_INTERACTION_MODE;
 
 const { TabPane } = Tabs;
 
@@ -76,8 +73,6 @@ export default class Inspector extends Component {
     }
     this.didInitialResize = true;
     this.props.applyClientMethod({methodName: 'getPageSource', ignoreResult: true});
-    this.props.getSavedActionFramework();
-    this.props.runKeepAliveLoop();
     window.addEventListener('resize', this.updateSourceTreeWidth);
     // this.startSession();
     // let desiredCapabilities = {
@@ -105,23 +100,16 @@ export default class Inspector extends Component {
     }
   }
 
-  screenshotInteractionChange (mode) {
-    const {selectScreenshotInteractionMode, clearSwipeAction} = this.props;
-    clearSwipeAction(); // When the action changes, reset the swipe action
-    selectScreenshotInteractionMode(mode);
-  }
-
   render () {
     const {screenshot, screenshotError, selectedElement = {},
-            quitSession, isFindingElementsTimes, visibleCommandMethod,
+           isFindingElementsTimes, visibleCommandMethod,
            selectedInteractionMode, selectInteractionMode, setVisibleCommandResult,
-           showKeepAlivePrompt, keepSessionAlive, sourceXML, t, visibleCommandResult} = this.props;
+           t, visibleCommandResult} = this.props;
     const {path} = selectedElement;
 
     let main = <div className={InspectorStyles['inspector-main']} ref={(el) => {this.screenAndSourceEl = el;}}>
       <div id='screenshotContainer' className={InspectorStyles['screenshot-container']}>
         {screenshot && <Screenshot {...this.props} />}
-        {screenshotError && t('couldNotObtainScreenshot', {screenshotError})}
         {!screenshot && !screenshotError &&
           <Spin size="large" spinning={true}>
             <div className={InspectorStyles.screenshotBox} />
@@ -175,7 +163,7 @@ export default class Inspector extends Component {
       <div className={InspectorStyles['inspector-container']}>
         {controls}
         {main}
-        <Modal
+        {/* <Modal
           title={t('Session Inactive')}
           visible={showKeepAlivePrompt}
           onOk={() => keepSessionAlive()}
@@ -184,7 +172,7 @@ export default class Inspector extends Component {
           cancelText={t('Quit Session')}
         >
           <p>{t('Your session is about to expire')}</p>
-        </Modal>
+        </Modal> */}
         <Modal
           title={t('methodCallResult', {methodName: visibleCommandMethod})}
           visible={!!visibleCommandResult}
