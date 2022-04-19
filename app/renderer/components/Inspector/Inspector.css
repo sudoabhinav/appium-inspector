@@ -90,12 +90,11 @@
 }
 
 .inspector-main .interaction-tab-container :global(.action-row) {
-    display: flex;
     height: 100%;
 }
 .inspector-main .interaction-tab-container :global(.action-col) {
-    min-width: 50%;
-    max-width: 50%;
+    height: 50%;
+    padding-left: 0;
 }
 
 .inspector-main .interaction-tab-container :global(.ant-card) {

@@ -32,8 +32,13 @@ class Screenshot extends Component {
     const screenshotEl = this.containerEl.querySelector('img');
 
     // now update scale ratio
+    const {attributes} = this.props.source;
+    let width = 0;
+    if(attributes.width) {
+      width = attributes.width;
+    }
     this.setState({
-      scaleRatio: (1080 / screenshotEl.offsetWidth)
+      scaleRatio: (width / screenshotEl.offsetWidth)
     });
   }
 
